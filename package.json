@@ -1,0 +1,23 @@
+{
+  "name": "chrome-gawblocker",
+  "version": "1.0.0",
+  "description": "chrome-gawblocker",
+  "main": "gawkblocker.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phcamargo23/chrome-gawblocker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/phcamargo23/chrome-gawblocker/issues"
+  },
+  "homepage": "https://github.com/phcamargo23/chrome-gawblocker#readme",
+  "dependencies": {
+    "moment": "^2.18.1"
+  }
+}

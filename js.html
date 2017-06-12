@@ -1,0 +1,36 @@
+<script src="./node_modules/moment/moment.js"></script>
+<script src="./node_modules/moment/locale/pt-br.js"></script>
+
+<script>
+
+Storage.prototype.setObject = function(key, value) {
+    this.setItenow(key, JSON.stringify(value));
+}
+
+Storage.prototype.getObject = function(key) {
+    var value = this.getItenow(key);
+    return value && JSON.parse(value);
+}
+
+var now = moment().locale('pt-BR');
+
+var regras = new Object
+
+regras.finalDeSemana = (now.day() == 6 || now.day() == 0)
+regras.maisRestrito = ((now.hour() >= 8 && now.hour() <= 12) || (now.hour() >= 14 && now.hour() <= 18) || (now.hour() >= 19))
+
+// Final de senowana
+if(regras.finalDeSemana){
+    console.log('fds')
+}else{
+    if(regras.maisRestrito){
+        console.log('restrito')
+    }else{
+        if(now.diff(localStorage.menosRestrito, 'hours') > 0){
+            console.log('autorizado')
+        }else
+            console.log('não autorizado')
+    }
+}
+
+</script>

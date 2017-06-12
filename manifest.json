@@ -4,7 +4,7 @@
   "manifest_version": 2,
   "description": "Tired of taking the Nerd Bait? Use GawkBlocker!",
   "background": {
-    "scripts": ["gawkblocker.js"]
+    "scripts": ["node_modules/moment/moment.js", "node_modules/moment/locale/pt-br.js", "gawkblocker.js"]
   },
   "options_page": "options.html",
   "icons": {
@@ -17,5 +17,5 @@
     "default_title": "GawkBlocker",
     "default_popup": "popup.html"
   },
-  "permissions": ["tabs", "http://*/*", "https://*/*", "background"] 
+  "permissions": ["tabs", "http://*/*", "https://*/*", "background", "alarms"] 
 }
