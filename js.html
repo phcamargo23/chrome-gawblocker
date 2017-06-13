@@ -1,36 +1,40 @@
-<script src="./node_modules/moment/moment.js"></script>
-<script src="./node_modules/moment/locale/pt-br.js"></script>
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>Click "Try it". Wait 3 seconds. The page will alert "Hello".</p>
+<p>Click "Stop" to prevent the first function to execute.</(p>
+<p>(You must click "Stop" before the 3 seconds are up.)</p>
+
+<button onclick="myVar = setInterval(myFunction, 1000)">Try it</button>
+
+<button onclick="clearTimeout(myVar)">Stop it</button>
 
 <script>
 
-Storage.prototype.setObject = function(key, value) {
-    this.setItenow(key, JSON.stringify(value));
-}
+const regex = /^(?:https?:\/\/)?/igm;
+const str = `https://play.google.com/store/apps/details?id=com.skgames.trafficracer%22
+http://mplay.google.co.in/sadfask/asdkfals?dk=10
+http://lplay.google.co.in/sadfask/asdkfals?dk=10
+http://play.google.co.in/sadfask/asdkfals?dk=10
+http://tplay.google.co.in/sadfask/asdkfals?dk=10
+http://www.google.co.in/sadfask/asdkfals?dk=10
+www.google.co.in/sadfask/asdkfals?dk=10
+http://user:pass@google.com/?a=b#asdd`;
+let m;
 
-Storage.prototype.getObject = function(key) {
-    var value = this.getItenow(key);
-    return value && JSON.parse(value);
-}
-
-var now = moment().locale('pt-BR');
-
-var regras = new Object
-
-regras.finalDeSemana = (now.day() == 6 || now.day() == 0)
-regras.maisRestrito = ((now.hour() >= 8 && now.hour() <= 12) || (now.hour() >= 14 && now.hour() <= 18) || (now.hour() >= 19))
-
-// Final de senowana
-if(regras.finalDeSemana){
-    console.log('fds')
-}else{
-    if(regras.maisRestrito){
-        console.log('restrito')
-    }else{
-        if(now.diff(localStorage.menosRestrito, 'hours') > 0){
-            console.log('autorizado')
-        }else
-            console.log('não autorizado')
+while ((m = regex.exec(str)) !== null) {
+    // This is necessary to avoid infinite loops with zero-width matches
+    if (m.index === regex.lastIndex) {
+        regex.lastIndex++;
     }
+    
+    // The result can be accessed through the `m`-variable.
+    console.log(m);
+
 }
+
 
 </script>
+</body>
+</html>
