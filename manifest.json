@@ -4,7 +4,7 @@
   "manifest_version": 2,
   "description": "Tired of taking the Nerd Bait? Use GawkBlocker!",
   "background": {
-    "scripts": ["node_modules/moment/moment.js", "node_modules/moment/locale/pt-br.js", "gawkblocker.js"]
+    "scripts": ["node_modules/moment/moment.js", "node_modules/moment/locale/pt-br.js", "node_modules/moment-duration-format/lib/moment-duration-format.js", "gawkblocker.js"]
   },
   "options_page": "options.html",
   "icons": {
