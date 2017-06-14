@@ -1,21 +1,32 @@
 {
   "name": "GawkBlocker",
-  "version": "1.7",
+  "version": "0.1",
   "manifest_version": 2,
-  "description": "Tired of taking the Nerd Bait? Use GawkBlocker!",
+  "description": "...",
   "background": {
-    "scripts": ["node_modules/moment/moment.js", "node_modules/moment/locale/pt-br.js", "node_modules/moment-duration-format/lib/moment-duration-format.js", "gawkblocker.js"]
+    "scripts": [
+      "node_modules/moment/moment.js",
+      "node_modules/moment/locale/pt-br.js",
+      "node_modules/moment-duration-format/lib/moment-duration-format.js",
+      "background.js"
+    ]
   },
   "options_page": "options.html",
   "icons": {
-    "16" : "images/GB-19.png",
-    "48" : "images/GB-48.png",
-    "128" : "images/GB-128.png"
+    "16": "images/GB-19.png",
+    "48": "images/GB-48.png",
+    "128": "images/GB-128.png"
   },
   "browser_action": {
     "default_icon": "images/GB-19.png",
     "default_title": "GawkBlocker",
     "default_popup": "popup.html"
   },
-  "permissions": ["tabs", "http://*/*", "https://*/*", "background", "alarms"] 
+  "permissions": [
+    "tabs",
+    "http://*/*",
+    "https://*/*",
+    "background",
+    "alarms"
+  ]
 }

@@ -12,7 +12,7 @@ timer = setInterval(function () {
     regras.aNoite = (agora.hours() >= 19 || agora.hours() < 8)
 
     function reiniciaTempo() {
-        if (regras.expediente) tempo = 3;
+        if (regras.expediente) tempo = 1;
         if (regras.fimDeTarde) tempo = 5;
         if (regras.almoco) tempo = 5;
         if (regras.aNoite) tempo = 2;
@@ -49,7 +49,7 @@ timer = setInterval(function () {
 
             if (primeiroAcesso == undefined) primeiroAcesso = agora;
 
-            if (bloqueado) chrome.tabs.update(tab.id, { "url": chrome.extension.getURL("instead.html") }, function () { });
+            if (bloqueado) chrome.tabs.update(tab.id, { "url": chrome.extension.getURL("pagina-de-bloqueio.html") }, function () { });
         }
 
         if (tempo == 0) {
