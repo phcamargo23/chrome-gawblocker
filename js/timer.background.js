@@ -74,3 +74,9 @@ timer = setInterval(function () {
 //     if(bloqueado)
 //         chrome.tabs.update(tabId, {"url" : chrome.extension.getURL("instead.html")}, function () {});
 // });
+
+// chrome.windows.create({
+//     tabId:     tab.id,
+//     type:      "popup",
+//     incognito: tab.incognito
+// });

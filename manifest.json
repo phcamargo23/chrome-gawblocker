@@ -4,13 +4,23 @@
   "manifest_version": 2,
   "description": "...",
   "background": {
+    "persistent": true,
     "scripts": [
       "node_modules/moment/moment.js",
       "node_modules/moment/locale/pt-br.js",
       "node_modules/moment-duration-format/lib/moment-duration-format.js",
-      "background.js"
+      "js/timer.background.js",
+      "js/balloon.background.js"
     ]
   },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["js/translate.content.js"],
+     "run_at": "document_end",
+     "all_frames": true      
+    }
+  ],
   "options_page": "options.html",
   "icons": {
     "16": "images/GB-19.png",
@@ -27,6 +37,10 @@
     "http://*/*",
     "https://*/*",
     "background",
-    "alarms"
+    "alarms",
+    "activeTab",
+    "contextMenus",
+    "<all_urls>",
+    "storage"
   ]
 }
