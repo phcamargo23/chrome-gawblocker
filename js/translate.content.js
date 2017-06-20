@@ -22,6 +22,10 @@ function getSelectedText() {
     return txt;
 }
 
+function objIsEmpty(obj){
+    return Object.keys(obj).length === 0 && obj.constructor === Object
+}
+
 function createBalloon(selection) {
     var rect = selection.getRangeAt(0).getBoundingClientRect();
     var span = document.createElement("span");
@@ -139,9 +143,9 @@ var t = '';
 // $(document).dblclick(function(e) {
 document.ondblclick = function () {
     var selection = getSelectedText();
-    console.log("Selected: " + selection);
+    // console.log("Selected: " + selection);
     var traducao = getJson(selection);
-    console.log(traducao);
+    // console.log(traducao);
     var balloon = createBalloon(selection);
     balloon.setText(traducao['sentences'][0]['trans']);
 
@@ -149,20 +153,21 @@ document.ondblclick = function () {
         balloon.close();
     }, 2000);
 
-    orig = JSON.stringify(traducao['sentences'][0]['orig']);
-    var word = {orig:traducao};
-    console.log(orig)
-    console.log(word)
+    var orig = traducao['sentences'][0]['orig'];
+    var word = {[orig]:traducao};
 
-    // var historico = [];
-    // historico.push({orig:traducao});
+    chrome.storage.sync.get(function(items) {
+      if(objIsEmpty(items)){
+            chrome.storage.sync.set({'historico': word}, function() {
+                console.log('Storage inicializado!');
+            });
+      }else{
+        items['historico'][[orig]] = traducao;
+        chrome.storage.sync.set(items, function(items2) {
+            console.log('Novo registro armazenado!')
+        });
+      }
+    });    
 
-    // if(localStorage.historico == undefined)
-    //     localStorage.historico = [];
-    // else
-
-    
-    // localStorage.historico.push({orig:JSON.stringify(traducao)});
 
 }
-

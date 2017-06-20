@@ -30,7 +30,7 @@
   "browser_action": {
     "default_icon": "images/GB-19.png",
     "default_title": "GawkBlocker",
-    "default_popup": "popup.html"
+    "default_popup": "html/popup.html"
   },
   "permissions": [
     "tabs",

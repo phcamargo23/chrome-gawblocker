@@ -31,7 +31,7 @@ timer = setInterval(function () {
     // console.log('Tempo de acesso restante: ' + tempo);
 
     console.log('Primeiro acesso: ' + (primeiroAcesso == undefined ? '-':primeiroAcesso.fromNow()) + '. ' +
-    'Acessado: ' + moment.duration(tempo, "minutes").format("h:mm"));
+    'Restante: ' + moment.duration(tempo, "minutes").format("h:mm"));
 
     chrome.tabs.getSelected(null, function (tab) {
         for (i = 0; i < sites.length; i++) {
