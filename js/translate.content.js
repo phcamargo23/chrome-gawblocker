@@ -139,16 +139,6 @@ function createBalloon(selection) {
     return balloon;
 }
 
-class Translate {
-    static original(obj) {
-        return obj.sentences[0].orig;
-    }
-
-    static traducao(obj) {
-        return obj.sentences[0].trans;
-    }
-}
-
 var t = '';
 // $(document).dblclick(function(e) {
 document.ondblclick = function () {
@@ -178,7 +168,5 @@ document.ondblclick = function () {
             console.log('Novo registro armazenado!')
         });
       }
-    });    
-
-
+    });
 }

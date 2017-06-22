@@ -5,7 +5,8 @@ $(document).ready(function () {
 
     chrome.storage.sync.get('historico', function (items) {
         Object.values(items["historico"]).forEach(function (element) {
-            console.log(element);
+            console.log(Translate.original(element) + ' - ' + Translate.traducao(element));
+            $('#words').append(Translate.traducao(element) + '</BR>');
         }, this);
     });
 

@@ -9,14 +9,16 @@
       "node_modules/moment/moment.js",
       "node_modules/moment/locale/pt-br.js",
       "node_modules/moment-duration-format/lib/moment-duration-format.js",
-      "js/timer.background.js",
-      "js/balloon.background.js"
+      "js/timer.background.js"
     ]
   },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["js/translate.content.js"],
+      "js": [
+        "js/common.js",
+        "js/translate.content.js"
+        ],
      "run_at": "document_end",
      "all_frames": true      
     }
