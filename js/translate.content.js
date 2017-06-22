@@ -139,6 +139,16 @@ function createBalloon(selection) {
     return balloon;
 }
 
+class Translate {
+    static original(obj) {
+        return obj.sentences[0].orig;
+    }
+
+    static traducao(obj) {
+        return obj.sentences[0].trans;
+    }
+}
+
 var t = '';
 // $(document).dblclick(function(e) {
 document.ondblclick = function () {
@@ -147,13 +157,14 @@ document.ondblclick = function () {
     var traducao = getJson(selection);
     // console.log(traducao);
     var balloon = createBalloon(selection);
-    balloon.setText(traducao['sentences'][0]['trans']);
+    // balloon.setText(traducao['sentences'][0]['trans']);
+    balloon.setText(Translate.traducao(traducao));
 
     setTimeout(function() {
         balloon.close();
     }, 2000);
 
-    var orig = traducao['sentences'][0]['orig'];
+    var orig = Translate.original(traducao);
     var word = {[orig]:traducao};
 
     chrome.storage.sync.get(function(items) {
