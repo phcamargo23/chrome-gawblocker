@@ -67,7 +67,7 @@ timer = setInterval(function () {
     var popup = chrome.extension.getViews({type: "popup"});
     // console.log(popup);
 
-    if(popup[0] != undefined) popup[0].$('#timer').html(tempo);
+    if(popup[0] != undefined) tempo < 1 ? 'Tempo esgotado' : popup[0].$('#timer').html(tempo);
 
 
 }, 1000);

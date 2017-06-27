@@ -7,3 +7,9 @@ class Translate {
         return obj.sentences[0].trans;
     }
 }
+
+function getPalavras(ctl) {
+    chrome.storage.sync.get('historico', function (items) {
+        return Object.values(items["historico"]);
+    });
+}
