@@ -30,8 +30,8 @@ timer = setInterval(function () {
     // console.log('Primeiro acesso foi ' + agora.diff(moment(primeiroAcesso).locale('pt-BR'), 'seconds') + ' seconds.');
     // console.log('Tempo de acesso restante: ' + tempo);
 
-    console.log('Primeiro acesso: ' + (primeiroAcesso == undefined ? '-':primeiroAcesso.fromNow()) + '. ' +
-    'Restante: ' + moment.duration(tempo, "minutes").format("h:mm"));
+    console.log('Primeiro acesso: ' + (primeiroAcesso == undefined ? '-' : primeiroAcesso.fromNow()) + '. ' +
+        'Restante: ' + moment.duration(tempo, "minutes").format("h:mm"));
 
     chrome.tabs.getSelected(null, function (tab) {
         for (i = 0; i < sites.length; i++) {
@@ -63,6 +63,12 @@ timer = setInterval(function () {
             primeiroAcesso = undefined;
         }
     });
+
+    var popup = chrome.extension.getViews({type: "popup"});
+    // console.log(popup);
+
+    if(popup[0] != undefined) popup[0].$('#timer').html(tempo);
+
 
 }, 1000);
 

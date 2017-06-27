@@ -1,70 +1,98 @@
 <!DOCTYPE html>
 <html lang="pt">
-  <head>
-      <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-      <title>Title of the document</title>
-    <!-- Material Icon CDN -->
-      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- Path of the materialize.min.css file -->
-      <link rel="stylesheet" href="../node_modules/materialize-css/dist/css/materialize.min.css" media="screen,projection">
-    <!-- Custom css file path -->
-      <link rel="stylesheet" href="../css/popup.css">
-    <!-- Used as an example only to position the footer at the end of the page.
-      You can delete these styles or move it to your custom css file -->
-    <style>
-      body {
-        display: flex;
-        min-height: 100vh;
-        flex-direction: column;
-      }  
-      main {
-        flex: 1 0 auto;
-      }
-    </style>
-  </head>
-  <body>
-    <header>
-      <nav class="cyan">
-    <div class="nav-wrapper">
-      <a href="#!" class="brand-logo"><i class="material-icons">cloud</i>Logo</a>
-      <ul class="right hide-on-med-and-down">
-        <li><a href="sass.html"><i class="material-icons">search</i></a></li>
-        <li><a href="badges.html"><i class="material-icons">view_module</i></a></li>
-        <li><a href="collapsible.html"><i class="material-icons">refresh</i></a></li>
-        <li><a href="mobile.html"><i class="material-icons">more_vert</i></a></li>
-      </ul>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- The above 2 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Note there is no responsive meta tag here -->
+
+  <link rel="icon" href="../../favicon.ico">
+
+  <title>Non-responsive Template for Bootstrap</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="../css/non-responsive.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Fixed navbar -->
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- The mobile navbar-toggle button can be safely removed since you do not need it in a non-responsive implementation -->
+        <a class="navbar-brand" href="#">Project name</a>
+      </div>
+      <!-- Note that the .navbar-collapse and .collapse classes have been removed from the #navbar -->
+      <div id="navbar">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Action</a></li>
+              <li><a href="#">Another action</a></li>
+              <li><a href="#">Something else here</a></li>
+              <li role="separator" class="divider"></li>
+              <li class="dropdown-header">Nav header</li>
+              <li><a href="#">Separated link</a></li>
+              <li><a href="#">One more separated link</a></li>
+            </ul>
+          </li>
+        </ul>
+        <form class="navbar-form navbar-left">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search">
+          </div>
+          <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#">Link</a></li>
+          <li><a href="#">Link</a></li>
+          <li><a href="#">Link</a></li>
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
     </div>
-      </nav>
-    </header>
-    <main>
-      <!-- Your content here -->
-    </main>
-    <footer class="page-footer cyan">
-      <div class="container">
-        <div class="row">
-          <div class="col s12 m8 l6">
-            <h5 class="white-text">First Footer Content</h5>
-            <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
-          </div>
-          <div class="col s12 m4 l6">
-            <h5 class="white-text">Second Footer Content</h5>
-            <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
-          </div>
-        </div>
+  </nav>
+
+  <div class="container">
+
+
+    <div class="row">
+      <div class="col-xs-3">
+        <span id="timer">0:00</span>
       </div>
-      <div class="footer-copyright">
-        <div class="container">
-          © 2017 Copyright Text
-          <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
-        </div>
+
+      <div class="col-xs-9">
+
+        <button type="button" class="btn btn-warning">button</button>
+
       </div>
-    </footer>
-    <!-- The jQuery file path -->
-      <script src="../node_modules/jquery/dist/jquery.min.js"></script>
-    <!-- Path of the materialize.min.js file -->
-      <script src="../node_modules/materialize-css/dist/js/materialize.min.js"></script>
-      <scrip src="../js/popup.js"></scrip>
-  </body>
+
+    </div>
+
+
+
+
+  </div>
+  <!-- /container -->
+
+
+  <!-- Bootstrap core JavaScript
+    ================================================== -->
+  <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
+
 </html>
