@@ -1,14 +1,3 @@
-function getJson(t) {
-    const TRANSLATE_URI = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=pt&hl=pt-BR&dt=t&dt=bd&dj=1&source=bubble&tk=708639.708639&q=';
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", TRANSLATE_URI + t, false);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send();
-    var response = JSON.parse(xhttp.responseText);
-
-    return response;
-}
-
 function getSelectedText() {
     var txt = '';
     if (window.getSelection) {
@@ -18,12 +7,9 @@ function getSelectedText() {
     } else if (document.selection) {
         txt = document.selection.createRange().text;
     }
-    // return txt.toString();
-    return txt;
-}
 
-function objIsEmpty(obj){
-    return Object.keys(obj).length === 0 && obj.constructor === Object
+    // console.log(txt.toString());
+    return txt;
 }
 
 function createBalloon(selection) {
@@ -139,34 +125,43 @@ function createBalloon(selection) {
     return balloon;
 }
 
-var t = '';
-// $(document).dblclick(function(e) {
-document.ondblclick = function () {
+$(document).bind('click dblclick', function(eventType) {
+    // console.log(eventType.type);
+
     var selection = getSelectedText();
-    // console.log("Selected: " + selection);
-    var traducao = getJson(selection);
-    // console.log(traducao);
+
+    // if(eventType.type == 'click' && selection.toString().length < 2) return true;
+
+    if(selection.toString().length < 2){
+        console.log('String pequena: '+selection.toString());
+        return true;
+    }
+
+    var traducao = Translate.getTranslation(selection);
+
+    if(Translate.idiomaDeOrigem(traducao)  != 'en'){
+        console.log('Entrada não aceita: ' + JSON.stringify(traducao));
+        return true;
+    }
+
     var balloon = createBalloon(selection);
-    // balloon.setText(traducao['sentences'][0]['trans']);
     balloon.setText(Translate.traducao(traducao));
 
     setTimeout(function() {
         balloon.close();
     }, 2000);
 
-    var orig = Translate.original(traducao);
-    var word = {[orig]:traducao};
-
     chrome.storage.sync.get(function(items) {
       if(objIsEmpty(items)){
-            chrome.storage.sync.set({'historico': word}, function() {
-                console.log('Storage inicializado!');
+            chrome.storage.sync.set({'historico': []}, function() {
+                console.log('Storage inicializado');
             });
       }else{
-        items['historico'][[orig]] = traducao;
+        items.historico.push(Translate.original(traducao));
         chrome.storage.sync.set(items, function(items2) {
-            console.log('Novo registro armazenado!')
+            console.log('Novo registro armazenado')
         });
       }
     });
-}
+
+});

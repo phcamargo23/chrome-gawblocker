@@ -1,36 +1,69 @@
 $("document").ready(function () {
-    //     chrome.storage.sync.get('historico', function (items) {
-    //         Object.values(items["historico"]).forEach(function (element) {
-    //             console.log(Translate.original(element) + ' - ' + Translate.traducao(element));
-    //             $('#palavras').append(Translate.traducao(element) + '</BR>');
-    //         }, this);
-    //     });
-
-    //     $('#btnExcecao').click(function() {
-    //         console.log('asdf');
-    //         chrome.tabs.create({ url: '../html/excecao.html'});
-    //     });
-
-
-    function recuperarPalavras(words) {
-        words.forEach(function (w) {
-            // console.log(Translate.original(w) + ' - ' + Translate.traducao(w));
-            $('#palavras').append(
-                `<div class="row">
-                    <div class="col-xs-6 text-right">${Translate.original(w)}</div>
-                    <div class="col-xs-6"><input type="text" class="form-control" required="required" pattern="${Translate.traducao(w)}"></div>
-                </div>`
-            );
-        }, this);
-
-        // $('.container').append(
-        //     `<div class="row">
-        //         <div class="col-xs-12"><input type="submit" class="form-control" /></div>
-        //     </div>`
-        // );
-
+    function checkSimilarity() {
+        var str1 = document.getElementById("lhsInput").value;
+        var str2 = document.getElementById("rhsInput").value;
+        document.getElementById("output").innerHTML = similarity(str1, str2);
     }
 
-    getPalavras(recuperarPalavras);
+    function similarity(s1, s2) {
+        var longer = s1;
+        var shorter = s2;
+        if (s1.length < s2.length) {
+            longer = s2;
+            shorter = s1;
+        }
+        var longerLength = longer.length;
+        if (longerLength == 0) {
+            return 1.0;
+        }
+        return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
+    }
+
+    function editDistance(s1, s2) {
+        s1 = s1.toLowerCase();
+        s2 = s2.toLowerCase();
+
+        var costs = new Array();
+        for (var i = 0; i <= s1.length; i++) {
+            var lastValue = i;
+            for (var j = 0; j <= s2.length; j++) {
+                if (i == 0)
+                    costs[j] = j;
+                else {
+                    if (j > 0) {
+                        var newValue = costs[j - 1];
+                        if (s1.charAt(i - 1) != s2.charAt(j - 1))
+                            newValue = Math.min(Math.min(newValue, lastValue),
+                                costs[j]) + 1;
+                        costs[j - 1] = lastValue;
+                        lastValue = newValue;
+                    }
+                }
+            }
+            if (i > 0)
+                costs[s2.length] = lastValue;
+        }
+        return costs[s2.length];
+    }
+
+    $('span').click(function (e) {
+        alert(e.target.index);
+    });
+
+    chrome.storage.sync.get('historico', function (items) {
+        console.log(items.historico);
+
+        $.each(items.historico, function (index, value) {
+            $('#palavras').append(
+                `<div class="row">
+                    <div class="col-xs-4 text-right">${value}</div>
+                    <div class="col-xs-4">
+                        <input type="text" class="form-control" required="required" pattern="">
+                    </div>
+                    <div class="col-xs-4 text-right"><span class="glyphicon glyphicon-remove" aria-hidden="true" index=${index}></span></div>
+                </div>`
+            );
+        });
+    });
 
 });
