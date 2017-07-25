@@ -5,17 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="../node_modules/angular/angular.min.js"></script>
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/now-ui-kit.css">
     <title>Document</title>
 </head>
 
-<body>
+<body ng-app="paginaDeExcecao" ng-controller="ctrl">
     <div class="container">
         <form action="" method="POST" role="form">
             <legend>Form title</legend>
-            <div id="palavras"></div>        
+            <div id="palavras"></div>
             <button type="submit" class="btn btn-primary">Submit</button>
+
+            <div class="row">
+                {{palavras}}
+                {{t}}
+                <li ng-repeat="p in palavras">{{p}}</li>
+            </div>
         </form>
 
     </div>

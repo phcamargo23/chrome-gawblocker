@@ -1,4 +1,6 @@
-$("document").ready(function () {
+var app = angular.module("paginaDeExcecao", []);
+
+app.controller("ctrl", function ($scope) {
     function checkSimilarity() {
         var str1 = document.getElementById("lhsInput").value;
         var str2 = document.getElementById("rhsInput").value;
@@ -46,24 +48,26 @@ $("document").ready(function () {
         return costs[s2.length];
     }
 
-    $('span').click(function (e) {
-        alert(e.target.index);
-    });
+    $scope.palavras = [];
+    var teste = 'sfdf';
 
-    chrome.storage.sync.get('historico', function (items) {
-        console.log(items.historico);
-
-        $.each(items.historico, function (index, value) {
-            $('#palavras').append(
-                `<div class="row">
-                    <div class="col-xs-4 text-right">${value}</div>
-                    <div class="col-xs-4">
-                        <input type="text" class="form-control" required="required" pattern="">
-                    </div>
-                    <div class="col-xs-4 text-right"><span class="glyphicon glyphicon-remove" aria-hidden="true" index=${index}></span></div>
-                </div>`
-            );
+    // https://stackoverflow.com/questions/23179029/chrome-storage-sync-get-not-storing-value-in-local-variable
+    function getPalavras(callback) {
+        chrome.storage.sync.get('historico', function (items) {
+            // words = Object.values(items.historico);
+            // console.log(items.historico);
+            callback(items.historico);
         });
-    });
+    }
 
+    function recuperarPalavras(words) {
+        // console.log(words);
+        $scope.palavras = words;
+        teste = words;
+        $scope.t = 'asdadf';
+    }
+
+    getPalavras(recuperarPalavras);    
+    console.log($scope.palavras);
+    console.log(teste);
 });

@@ -153,7 +153,7 @@ $(document).bind('click dblclick', function(eventType) {
 
     chrome.storage.sync.get(function(items) {
       if(objIsEmpty(items)){
-            chrome.storage.sync.set({'historico': []}, function() {
+            chrome.storage.sync.set({'historico': [Translate.original(traducao)]}, function() {
                 console.log('Storage inicializado');
             });
       }else{
