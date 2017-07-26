@@ -48,26 +48,63 @@ app.controller("ctrl", function ($scope) {
         return costs[s2.length];
     }
 
-    $scope.palavras = [];
-    var teste = 'sfdf';
+    function getPalavras() {
+        // https://stackoverflow.com/questions/24687036/variable-wont-update-using-chrome-storage-api-in-a-chrome-app
+        chrome.storage.sync.get('historico', function (result) {
+            $scope.$apply(function () {
+                $scope.palavras = result.historico;
+            });
+        });
+        // console.log($scope.palavras); // não funciona
+    }
 
-    // https://stackoverflow.com/questions/23179029/chrome-storage-sync-get-not-storing-value-in-local-variable
-    function getPalavras(callback) {
-        chrome.storage.sync.get('historico', function (items) {
-            // words = Object.values(items.historico);
-            // console.log(items.historico);
-            callback(items.historico);
+    $scope.remove = function (i) {
+        chrome.storage.sync.get('historico', function (result) {
+            result.historico.splice(i, 1);
+            chrome.storage.sync.set(result);
+            getPalavras();
         });
     }
 
-    function recuperarPalavras(words) {
-        // console.log(words);
-        $scope.palavras = words;
-        teste = words;
-        $scope.t = 'asdadf';
+    $scope.validate = function (p, e) {
+        var p1 = e.target.value;
+        var p2 = Translate.getTranslation(p);
+
+        if (p1 == '') return;
+
+        p2 = Translate.variacoes(p2);
+
+        // console.log(p1);
+        // console.log(p2);
+
+        if (p2.indexOf(p1) != -1) {
+            $scope.acertos++;
+            e.target.disabled = true
+
+            // var otherWindows = chrome.extension.getBackgroundPage();
+            // console.log(otherWindows.tempo);            
+            // otherWindows.tempo += 60;
+            // // otherWindows.tempo = 999;
+            // otherWindows.atualizarView();
+            // console.log(otherWindows.tempo);
+            // // chrome.extension.getBackgroundPage(function (bgpage) {
+            // //     bgpage.tempo = 999;
+            // // })
+
+            chrome.storage.local.get(function(itens){
+                chrome.storage.local.set({'tempo':itens.tempo + 60});
+            });
+
+        }
+
+
+        chrome.storage.local.get(function(itens){
+            console.log(itens);
+        });
+
     }
 
-    getPalavras(recuperarPalavras);    
-    console.log($scope.palavras);
-    console.log(teste);
+    $scope.acertos = 0;
+    getPalavras();
+
 });

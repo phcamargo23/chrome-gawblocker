@@ -19,9 +19,15 @@
             <button type="submit" class="btn btn-primary">Submit</button>
 
             <div class="row">
-                {{palavras}}
-                {{t}}
-                <li ng-repeat="p in palavras">{{p}}</li>
+                <ul>{{acertos}}
+                    <!-- https://docs.angularjs.org/error/ngRepeat/dupes -->
+                    <li ng-repeat="p in palavras track by $index">{{p}}
+                        
+                        <input ng-blur="validate(p, $event)" type="text" name="" id="input1/(\w+)/\u\1/g" class="form-control" value="" pattern="" title="">
+                        
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="remove($index)"></span>
+                    </li>
+                </ul>
             </div>
         </form>
 

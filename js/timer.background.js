@@ -1,6 +1,7 @@
 sites = ['facebook.com', 'instagram.com', 'globoesporte.globo.com'];
 bloqueado = false;
 primeiroAcesso = undefined;
+tempo = undefined;
 
 timer = setInterval(function () {
     var regras = new Object;
@@ -69,6 +70,7 @@ timer = setInterval(function () {
 
     if(popup[0] != undefined) tempo < 1 ? 'Tempo esgotado' : popup[0].$('#timer').html(tempo);
 
+    chrome.storage.local.set({'tempo':tempo});
 
 }, 1000);
 

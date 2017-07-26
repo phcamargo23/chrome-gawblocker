@@ -1,4 +1,4 @@
-function objIsEmpty(obj){
+function objIsEmpty(obj) {
     return Object.keys(obj).length === 0 && obj.constructor === Object
 }
 
@@ -24,20 +24,36 @@ class Translate {
         return obj.sentences[0].trans;
     }
 
-    static variacoes(obj) {
+    static variacoesEmGrupos(obj) {
         var v = []
 
         obj.dict.forEach(function (element) {
             v.push(
                 {
                     'classe': element.pos,
-                    'termos': elemnt.terms
+                    'termos': element.terms
                 }
             )
         }, this);
 
         return v;
     }
+
+    static variacoes(obj) {
+        if (obj.dict == undefined)
+            return Translate.traducao(obj).toLowerCase()
+
+        var v = []
+
+        obj.dict.forEach(function (e1) {
+            e1.terms.forEach(function (e2) {
+                v.push(e2);
+            });
+        }, this);
+
+        return v;
+    }
+
 
     static idiomaDeOrigem(obj) {
         return obj.src;
