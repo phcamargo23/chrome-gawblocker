@@ -91,16 +91,23 @@ app.controller("ctrl", function ($scope) {
             // //     bgpage.tempo = 999;
             // // })
 
-            chrome.storage.local.get(function(itens){
-                chrome.storage.local.set({'tempo':itens.tempo + 60});
-            });
+            // chrome.storage.local.get(function(itens){
+            //     itens.tempo = itens.tempo + 60;
+            //     chrome.storage.local.set({'tempo':itens.tempo + 60}, function(){
+            //         console.log(itens.tempo);
+            //     });
+            // });
+
+            localStorage.tempo = Number(localStorage.tempo) + 60;
+            // console.log(localStorage.tempoRestante);
+            //  localStorage.tempo = Numb 60;
 
         }
 
 
-        chrome.storage.local.get(function(itens){
-            console.log(itens);
-        });
+        // chrome.storage.local.get(function(itens){
+        //     console.log(itens);
+        // });
 
     }
 
