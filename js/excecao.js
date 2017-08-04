@@ -80,38 +80,14 @@ app.controller("ctrl", function ($scope) {
         if (p2.indexOf(p1) != -1) {
             $scope.acertos++;
             e.target.disabled = true
-
-            // var otherWindows = chrome.extension.getBackgroundPage();
-            // console.log(otherWindows.tempo);            
-            // otherWindows.tempo += 60;
-            // // otherWindows.tempo = 999;
-            // otherWindows.atualizarView();
-            // console.log(otherWindows.tempo);
-            // // chrome.extension.getBackgroundPage(function (bgpage) {
-            // //     bgpage.tempo = 999;
-            // // })
-
-            // chrome.storage.local.get(function(itens){
-            //     itens.tempo = itens.tempo + 60;
-            //     chrome.storage.local.set({'tempo':itens.tempo + 60}, function(){
-            //         console.log(itens.tempo);
-            //     });
-            // });
-
-            localStorage.tempo = Number(localStorage.tempo) + 60;
-            // console.log(localStorage.tempoRestante);
-            //  localStorage.tempo = Numb 60;
-
+            // localStorage.tempo = Number(localStorage.tempo) + 60;
+            localStorage.bloqueado = 1;
+            var otherWindows = chrome.extension.getBackgroundPage();
+            otherWindows.reiniciarTempo();
         }
-
-
-        // chrome.storage.local.get(function(itens){
-        //     console.log(itens);
-        // });
 
     }
 
     $scope.acertos = 0;
     getPalavras();
-
 });
