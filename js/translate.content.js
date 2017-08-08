@@ -128,23 +128,26 @@ function createBalloon(selection) {
 $(document).bind('click dblclick', function(eventType) {
     // console.log(eventType.type);
 
-    var selection = getSelectedText();
+    var selecao = getSelectedText();
+    var entrada = selecao.toString();
+    var traducao = Translate.getTranslation(entrada);
 
-    // if(eventType.type == 'click' && selection.toString().length < 2) return true;
-
-    if(selection.toString().length < 2){
-        console.log('String pequena: '+selection.toString());
-        return true;
+    if(selecao.toString().length < 2){
+        console.log('Entrada pequena ou vazia: '+entrada);
+        return;
     }
 
-    var traducao = Translate.getTranslation(selection);
+    if(eventType.type == 'dblclick' && entrada.toLowerCase() == Translate.traducao(traducao).toLowerCase()){
+        console.log('Tradução invariante: '+entrada);
+        return
+    }
 
     if(Translate.idiomaDeOrigem(traducao)  != 'en'){
         console.log('Entrada não aceita: ' + JSON.stringify(traducao));
-        return true;
+        return;
     }
 
-    var balloon = createBalloon(selection);
+    var balloon = createBalloon(selecao);
     balloon.setText(Translate.traducao(traducao));
 
     setTimeout(function() {

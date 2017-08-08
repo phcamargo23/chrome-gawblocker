@@ -41,9 +41,11 @@ class Translate {
 
     static variacoes(obj) {
         if (obj.dict == undefined)
-            return Translate.traducao(obj).toLowerCase()
+            return this.traducao(obj).toLowerCase()
 
         var v = []
+
+        v.push(this.traducao(obj))
 
         obj.dict.forEach(function (e1) {
             e1.terms.forEach(function (e2) {
