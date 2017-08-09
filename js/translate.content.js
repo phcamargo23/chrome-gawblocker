@@ -125,24 +125,37 @@ function createBalloon(selection) {
     return balloon;
 }
 
-$(document).bind('click dblclick', function(eventType) {
+//Não utilizado em lugar nenhum
+function getIndiceDasPontuacoes(str) {
+    var regexp = /[.!?]/g;
+    var match, matches = [];
+
+    while ((match = regexp.exec(str)) != null) {
+        matches.push(match.index);
+    }
+
+    return matches;
+}
+// selection.modify("extend", "right", "sentence");
+
+$(document).bind('click dblclick', function (eventType) {
     // console.log(eventType.type);
 
     var selecao = getSelectedText();
     var entrada = selecao.toString();
     var traducao = Translate.getTranslation(entrada);
 
-    if(selecao.toString().length < 2){
-        console.log('Entrada pequena ou vazia: '+entrada);
+    if (selecao.toString().length < 2) {
+        console.log('Entrada pequena ou vazia: ' + entrada);
         return;
     }
 
-    if(eventType.type == 'dblclick' && entrada.toLowerCase() == Translate.traducao(traducao).toLowerCase()){
-        console.log('Tradução invariante: '+entrada);
+    if (eventType.type == 'dblclick' && entrada.toLowerCase() == Translate.traducao(traducao).toLowerCase()) {
+        console.log('Tradução invariante: ' + entrada);
         return
     }
 
-    if(Translate.idiomaDeOrigem(traducao)  != 'en'){
+    if (Translate.idiomaDeOrigem(traducao) != 'en') {
         console.log('Entrada não aceita: ' + JSON.stringify(traducao));
         return;
     }
@@ -150,21 +163,21 @@ $(document).bind('click dblclick', function(eventType) {
     var balloon = createBalloon(selecao);
     balloon.setText(Translate.traducao(traducao));
 
-    setTimeout(function() {
+    setTimeout(function () {
         balloon.close();
     }, 2000);
 
-    chrome.storage.sync.get(function(items) {
-      if(objIsEmpty(items)){
-            chrome.storage.sync.set({'historico': [Translate.original(traducao)]}, function() {
+    chrome.storage.sync.get(function (items) {
+        if (objIsEmpty(items)) {
+            chrome.storage.sync.set({ 'historico': [Translate.original(traducao)] }, function () {
                 console.log('Storage inicializado');
             });
-      }else{
-        items.historico.push(Translate.original(traducao));
-        chrome.storage.sync.set(items, function(items2) {
-            console.log('Novo registro armazenado')
-        });
-      }
+        } else {
+            items.historico.push(Translate.original(traducao));
+            chrome.storage.sync.set(items, function (items2) {
+                console.log('Novo registro armazenado')
+            });
+        }
     });
 
 });
