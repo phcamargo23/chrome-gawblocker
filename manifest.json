@@ -40,10 +40,11 @@
     "http://*/*",
     "https://*/*",
     "background",
-    "alarms",
     "activeTab",
     "contextMenus",
     "<all_urls>",
-    "storage"
+    "storage",
+    "alarms", 
+    "notifications"
   ]
 }

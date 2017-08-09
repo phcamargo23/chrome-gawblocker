@@ -51,12 +51,25 @@ timer = setInterval(function () {
         }
 
         if (estaNaListaNegra) {
-        
-            if (localStorage.bloqueado == 1){
+
+            if (localStorage.bloqueado == 1) {
                 chrome.tabs.update(tab.id, { "url": chrome.extension.getURL("html/excecao.html") }, function () { });
-            }else
+            } else {
                 localStorage.tempo--;
-            
+
+                if (localStorage.tempo <= 10) {
+                    chrome.notifications.create(
+                        'contagem-regressiva', {
+                            type: 'basic',
+                            iconUrl: '../images/GB-48.png',
+                            title: "Contagem regressiva",
+                            message: localStorage.tempo
+                        },
+                        function (notificationId) { }
+                    );
+                }
+            }
+
             if (primeiroAcesso == undefined) primeiroAcesso = agora;
 
         }
@@ -71,13 +84,11 @@ timer = setInterval(function () {
     if (passouIntervaloBloqueado) {
         reiniciarTempo();
         primeiroAcesso = undefined;
-    }    
+    }
 
     var popup = chrome.extension.getViews({ type: "popup" });
     // console.log(popup);
 
     if (popup[0] != undefined) localStorage.tempo < 1 ? 'Tempo esgotado' : popup[0].$('#timer').html(localStorage.tempo);
-
-    // console.log(localStorage.tempo);
 
 }, 1000);
