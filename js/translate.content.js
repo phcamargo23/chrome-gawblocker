@@ -1,3 +1,27 @@
+const balaoId = '_balaoDeTraducao'
+var ctrlIsPressed = false;
+
+//Não utilizado
+function getIndiceDasPontuacoes(str) {
+    var regexp = /[.!?]/g;
+    var match, matches = [];
+
+    while ((match = regexp.exec(str)) != null) {
+        matches.push(match.index);
+    }
+
+    return matches;
+}
+
+//Não utilizado
+function getPalavraClicada() {
+    selObj.modify("move", "backward", "word");
+    var startOffset = selObj.anchorOffset;
+    selObj.modify("move", "forward", "word");
+    var endOffset = selObj.anchorOffset;
+    var entrada = selObj.anchorNode.substringData(startOffset, endOffset - startOffset).trim().trim();
+}
+
 function getSelectedText() {
     var txt = '';
     if (window.getSelection) {
@@ -113,12 +137,6 @@ function createBalloon(selection) {
 
     }
 
-    span.id = '_balao';
-
-    // span.addEventListener("keydown", function () {
-    //     balloon.close();
-    // }, false);
-
     var balloon = {
         setText: function (text) {
             span.removeChild(loading);
@@ -129,24 +147,41 @@ function createBalloon(selection) {
         }
     };
 
+    span.id = balaoId;
+
+    span.addEventListener("click", function () {
+        balloon.close();
+    }, false);
+
+
     return balloon;
 }
 
-//Não utilizado em lugar nenhum
-function getIndiceDasPontuacoes(str) {
-    var regexp = /[.!?]/g;
-    var match, matches = [];
-
-    while ((match = regexp.exec(str)) != null) {
-        matches.push(match.index);
+function ehTraducaoValida(entrada, traducao) {
+    if (Translate.idiomaDeOrigem(traducao) != 'en') {
+        // console.log('Entrada não aceita: ' + JSON.stringify(traducao));
+        return false;
     }
 
-    return matches;
+    return true;
 }
-// selection.modify("extend", "right", "sentence");
 
+function existeBalao(){
+    return $('#'+balaoId) != null;
+}
 
-function adicionarAoHistorico(traducao) {
+function evitarDuplicacaoDeBalao() {
+    if (existeBalao) {
+        $('#'+balaoId).click();
+    }
+}
+
+function adicionarAoHistorico(entrada, traducao) {
+    if (entrada.toLowerCase() == Translate.traducao(traducao).toLowerCase()) {
+        // console.log('Tradução invariante: ' + entrada);
+        return;
+    }
+
     chrome.storage.sync.get(function (items) {
         if (objIsEmpty(items)) {
             chrome.storage.sync.set({ 'historico': [Translate.original(traducao)] }, function () {
@@ -161,55 +196,45 @@ function adicionarAoHistorico(traducao) {
     });
 }
 
-var ultimaEntrada = undefined;
+$(document).bind('dblclick', function (e) {
+    evitarDuplicacaoDeBalao();
 
-$(document).bind('click dblclick', function (eventType) {
-    // if (eventType.type == 'keydown' && eventType.keyCode == 16) {
-    //     console.log(eventType);
-    // }
-
-    var balao = document.getElementById('_balao');
-
-    //Se já tiver o balão aberto
-    if (balao != null && eventType.type == 'click') {
-        balao.remove();
-        return;
-    }
-
-    var selecao = getSelectedText();
-    var entrada = selecao.toString();
+    var selObj = getSelectedText();
+    var entrada = selObj.toString().trim().trim();
     var traducao = Translate.getTranslation(entrada);
 
-    if (ultimaEntrada == entrada && eventType.type == 'click')
+    if (!ehTraducaoValida(entrada, traducao)) return;
 
-        if (selecao.toString().length < 2) {
-            // console.log('Entrada pequena ou vazia: ' + entrada);
-            return;
-        }
-
-    if (eventType.type == 'dblclick' && entrada.toLowerCase() == Translate.traducao(traducao).toLowerCase()) {
-        // console.log('Tradução invariante: ' + entrada);
-        return
-    }
-
-    if (Translate.idiomaDeOrigem(traducao) != 'en') {
-        // console.log('Entrada não aceita: ' + JSON.stringify(traducao));
-        return;
-    }
-
-    var balloon = createBalloon(selecao);
+    var balloon = createBalloon(selObj);
     balloon.setText(Translate.traducao(traducao));
 
-    if (eventType.type == 'dblclick') {
-        setTimeout(function () {
-            //Utilizando apenas um remove só a sombra...
-            document.getElementById('_balao').remove();
-            document.getElementById('_balao').remove();
-        }, 2000);
+    if(existeBalao()) return;
+
+    setTimeout(function () {
+        balloon.close();
+    }, 1000);
+
+});
+
+$(document).bind('click', function (e) {
+    if (e.target.id != balaoId && ctrlIsPressed) {
+        evitarDuplicacaoDeBalao();
+        
+        var selObj = getSelectedText();
+        var entrada = selObj.toString().trim().trim();
+        var traducao = Translate.getTranslation(entrada);
+
+        if (!ehTraducaoValida(entrada, traducao)) return;
+
+        var balloon = createBalloon(selObj);
+        balloon.setText(Translate.traducao(traducao));
     }
+});
 
-    adicionarAoHistorico(traducao);
+$(document).bind('keydown', function (e) {
+    ctrlIsPressed = e.ctrlKey;
+});
 
-    ultimaEntrada = entrada
-
+$(document).bind('keyup', function () {
+    ctrlIsPressed = false;
 });
