@@ -57,7 +57,7 @@ timer = setInterval(function () {
             } else {
                 localStorage.tempo--;
 
-                if (localStorage.tempo <= 10) {
+                if (localStorage.tempo <= 10 || localStorage.tempo % 60 == 0) {
                     chrome.notifications.create(
                         'contagem-regressiva', {
                             type: 'basic',
