@@ -213,6 +213,8 @@ $(document).bind('dblclick', function (e) {
     var balloon = createBalloon(selObj);
     balloon.setText(Translate.traducao(traducao));
 
+    adicionarAoHistorico(entrada, traducao);
+
     if(existeBalao()) return;
 
     setTimeout(function () {
@@ -233,6 +235,8 @@ $(document).bind('click', function (e) {
 
         var balloon = createBalloon(selObj);
         balloon.setText(Translate.traducao(traducao));
+
+        adicionarAoHistorico(entrada, traducao);
     }
 });
 
