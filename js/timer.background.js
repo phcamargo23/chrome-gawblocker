@@ -20,7 +20,7 @@ function reiniciarTempo() {
     if (regras.aNoite) localStorage.tempo = 2;
     if (regras.finalDeSemana) localStorage.tempo = 5;
 
-    localStorage.tempo *= 3;
+    localStorage.tempo *= 60;
     localStorage.bloqueado = 0;
 }
 

@@ -157,7 +157,12 @@ function createBalloon(selection) {
     return balloon;
 }
 
-function ehTraducaoValida(entrada, traducao) {
+function ehTraducaoValida(entrada, traducao, element) {
+    if (element.tagName == 'INPUT'){
+        // console.log('Elemento input');
+        return false;
+    }
+
     if (Translate.idiomaDeOrigem(traducao) != 'en') {
         // console.log('Entrada não aceita: ' + JSON.stringify(traducao));
         return false;
@@ -203,7 +208,7 @@ $(document).bind('dblclick', function (e) {
     var entrada = selObj.toString().trim().trim();
     var traducao = Translate.getTranslation(entrada);
 
-    if (!ehTraducaoValida(entrada, traducao)) return;
+    if (!ehTraducaoValida(entrada, traducao, e.target)) return;
 
     var balloon = createBalloon(selObj);
     balloon.setText(Translate.traducao(traducao));
@@ -224,7 +229,7 @@ $(document).bind('click', function (e) {
         var entrada = selObj.toString().trim().trim();
         var traducao = Translate.getTranslation(entrada);
 
-        if (!ehTraducaoValida(entrada, traducao)) return;
+        if (!ehTraducaoValida(entrada, traducao, e.target)) return;
 
         var balloon = createBalloon(selObj);
         balloon.setText(Translate.traducao(traducao));
