@@ -1,6 +1,58 @@
 const balaoId = '_balaoDeTraducao'
 var ctrlIsPressed = false;
 
+function tipoDeTraducao_1() {
+    //Palavra: dblcilck, Frase: pressionar CTRL
+    
+    $(document).bind('dblclick', function (e) {
+        evitarDuplicacaoDeBalao();
+
+        var selObj = getSelectedText();
+        var entrada = selObj.toString().trim().trim();
+        var traducao = Translate.getTranslation(entrada);
+
+        if (!ehTraducaoValida(entrada, traducao, e.target)) return;
+
+        var balloon = createBalloon(selObj);
+        balloon.setText(Translate.traducao(traducao));
+
+        adicionarAoHistorico(entrada, traducao);
+
+        if (existeBalao()) return;
+
+        setTimeout(function () {
+            balloon.close();
+        }, 1000);
+
+    });
+
+    $(document).bind('click', function (e) {
+        if (e.target.id != balaoId && ctrlIsPressed) {
+            evitarDuplicacaoDeBalao();
+
+            var selObj = getSelectedText();
+            var entrada = selObj.toString().trim().trim();
+            var traducao = Translate.getTranslation(entrada);
+
+            if (!ehTraducaoValida(entrada, traducao, e.target)) return;
+
+            var balloon = createBalloon(selObj);
+            balloon.setText(Translate.traducao(traducao));
+
+            adicionarAoHistorico(entrada, traducao);
+        }
+    });
+
+    $(document).bind('keydown', function (e) {
+        ctrlIsPressed = e.ctrlKey;
+    });
+
+    $(document).bind('keyup', function () {
+        ctrlIsPressed = false;
+    });
+
+}
+
 //Não utilizado
 function getIndiceDasPontuacoes(str) {
     var regexp = /[.!?]/g;
@@ -13,14 +65,6 @@ function getIndiceDasPontuacoes(str) {
     return matches;
 }
 
-//Não utilizado
-function getPalavraClicada() {
-    selObj.modify("move", "backward", "word");
-    var startOffset = selObj.anchorOffset;
-    selObj.modify("move", "forward", "word");
-    var endOffset = selObj.anchorOffset;
-    var entrada = selObj.anchorNode.substringData(startOffset, endOffset - startOffset).trim().trim();
-}
 
 function getSelectedText() {
     var txt = '';
@@ -158,7 +202,7 @@ function createBalloon(selection) {
 }
 
 function ehTraducaoValida(entrada, traducao, element) {
-    if (element.tagName == 'INPUT'){
+    if (element.tagName == 'INPUT') {
         // console.log('Elemento input');
         return false;
     }
@@ -171,13 +215,13 @@ function ehTraducaoValida(entrada, traducao, element) {
     return true;
 }
 
-function existeBalao(){
-    return $('#'+balaoId) != null;
+function existeBalao() {
+    return $('#' + balaoId) != null;
 }
 
 function evitarDuplicacaoDeBalao() {
     if (existeBalao) {
-        $('#'+balaoId).click();
+        $('#' + balaoId).click();
     }
 }
 
@@ -201,34 +245,50 @@ function adicionarAoHistorico(entrada, traducao) {
     });
 }
 
-$(document).bind('dblclick', function (e) {
-    evitarDuplicacaoDeBalao();
 
-    var selObj = getSelectedText();
-    var entrada = selObj.toString().trim().trim();
-    var traducao = Translate.getTranslation(entrada);
 
-    if (!ehTraducaoValida(entrada, traducao, e.target)) return;
-
-    var balloon = createBalloon(selObj);
-    balloon.setText(Translate.traducao(traducao));
-
-    adicionarAoHistorico(entrada, traducao);
-
-    if(existeBalao()) return;
-
-    setTimeout(function () {
-        balloon.close();
-    }, 1000);
-
-});
 
 $(document).bind('click', function (e) {
-    if (e.target.id != balaoId && ctrlIsPressed) {
+    // console.log(e.target.textContent.toString());
+
+    // if(e.target.firstElementChild != null){
+    //     console.log('Elemento não aceito!');
+    //     return;
+    // }
+
+    // var text = e.target.textContent.toString();
+    // var match = /\r|\n/.exec(text);
+    // if (match) {
+    //     console.log('Elemento não aceito!');
+    //     return;
+    // }
+
+    if (e.target.id != balaoId) {
         evitarDuplicacaoDeBalao();
-        
+
         var selObj = getSelectedText();
-        var entrada = selObj.toString().trim().trim();
+        var apenasClicou = selObj.anchorOffset == selObj.focusOffset;
+
+        //Se apenas clicou numa palavra e não selecionou um texto
+        if (apenasClicou) {
+            var text = e.target.textContent.toString();
+            var match = /\r|\n/.exec(text);
+            if (match) {
+                console.log('Elemento não aceito!');
+                return;
+            }
+
+            selObj.modify("move", "backward", "word");
+            var startOffset = selObj.anchorOffset;
+            selObj.modify("move", "forward", "word");
+            var endOffset = selObj.anchorOffset;
+            var entrada = selObj.anchorNode.substringData(startOffset, endOffset - startOffset).trim().trim();
+        } else {
+            var startOffset = selObj.anchorOffset;
+            var endOffset = selObj.anchorOffset;
+            var entrada = selObj.toString().trim().trim();
+        }
+
         var traducao = Translate.getTranslation(entrada);
 
         if (!ehTraducaoValida(entrada, traducao, e.target)) return;
@@ -236,14 +296,14 @@ $(document).bind('click', function (e) {
         var balloon = createBalloon(selObj);
         balloon.setText(Translate.traducao(traducao));
 
-        adicionarAoHistorico(entrada, traducao);
+        if (apenasClicou)
+            var time = 1000;
+        else
+            var time = 100 * Translate.traducao(traducao).length;
+
+        setTimeout(function () {
+            balloon.close();
+        }, time);
+
     }
-});
-
-$(document).bind('keydown', function (e) {
-    ctrlIsPressed = e.ctrlKey;
-});
-
-$(document).bind('keyup', function () {
-    ctrlIsPressed = false;
 });
