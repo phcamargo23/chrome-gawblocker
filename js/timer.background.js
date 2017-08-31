@@ -57,6 +57,8 @@ timer = setInterval(function () {
             } else {
                 localStorage.tempo--;
 
+
+                chrome.browserAction.setBadgeText({text:localStorage.tempo});
                 if (localStorage.tempo <= 10 || localStorage.tempo % 60 == 0) {
                     chrome.notifications.create(
                         'contagem-regressiva', {

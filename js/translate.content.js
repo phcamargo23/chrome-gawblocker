@@ -245,9 +245,6 @@ function adicionarAoHistorico(entrada, traducao) {
     });
 }
 
-
-
-
 $(document).bind('click', function (e) {
     // console.log(e.target.textContent.toString());
 
@@ -294,16 +291,18 @@ $(document).bind('click', function (e) {
         if (!ehTraducaoValida(entrada, traducao, e.target)) return;
 
         var balloon = createBalloon(selObj);
-        balloon.setText(Translate.traducao(traducao));
+        // balloon.setText(Translate.traducao(traducao));
+        // console.log(Translate.variacoesEmGrupos(traducao));
+        balloon.setText(Translate.variacoesEmGrupos(traducao));
 
-        if (apenasClicou)
-            var time = 1000;
-        else
-            var time = 100 * Translate.traducao(traducao).length;
+        // if (apenasClicou)
+        //     var time = 1000;
+        // else
+        //     var time = 100 * Translate.traducao(traducao).length;
 
-        setTimeout(function () {
-            balloon.close();
-        }, time);
+        // setTimeout(function () {
+        //     balloon.close();
+        // }, time);
 
     }
 });

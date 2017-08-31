@@ -15,28 +15,12 @@ class Translate {
         return response;
     }
 
-
     static original(obj) {
         return obj.sentences[0].orig;
     }
 
     static traducao(obj) {
         return obj.sentences[0].trans;
-    }
-
-    static variacoesEmGrupos(obj) {
-        var v = []
-
-        obj.dict.forEach(function (element) {
-            v.push(
-                {
-                    'classe': element.pos,
-                    'termos': element.terms
-                }
-            )
-        }, this);
-
-        return v;
     }
 
     static variacoes(obj) {
@@ -56,6 +40,21 @@ class Translate {
         return v;
     }
 
+    static variacoesEmGrupos(obj) {
+        var v = []
+
+        obj.dict.forEach(function (element) {
+            v.push(
+                {
+                    'classe': element.pos,
+                    'termos': element.terms
+                }
+            )
+        }, this);
+
+        return v;
+        // return obj.dict;
+    }
 
     static idiomaDeOrigem(obj) {
         return obj.src;
