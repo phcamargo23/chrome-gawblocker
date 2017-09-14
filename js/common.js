@@ -41,10 +41,12 @@ class Translate {
     }
 
     static variacoesEmGrupos(obj) {
-        var v = []
+        var v = new Object();
+        v.principal = this.traducao(obj);        
+        v.secundarios = []
 
         obj.dict.forEach(function (element) {
-            v.push(
+            v.secundarios.push(
                 {
                     'classe': element.pos,
                     'termos': element.terms

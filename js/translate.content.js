@@ -184,7 +184,20 @@ function createBalloon(selection) {
     var balloon = {
         setText: function (text) {
             span.removeChild(loading);
-            content.innerHTML = text;
+            // content.innerHTML = `<h3>${text.principal}</h3>`;
+
+            var classe;
+            text.secundarios.forEach(function(e) {
+                classe = `<h4>${e.classe}</h4>`
+                termos = `<h5>${e.termos}</h5>`
+                // content.append(classe);
+            }, this);
+
+            content.innerHTML = 
+            `
+                <h3>${text.principal}</h3>
+                ${classe}
+            `;
         },
         close: function () {
             span.parentNode.removeChild(span);
@@ -292,7 +305,7 @@ $(document).bind('click', function (e) {
 
         var balloon = createBalloon(selObj);
         // balloon.setText(Translate.traducao(traducao));
-        // console.log(Translate.variacoesEmGrupos(traducao));
+        console.log(Translate.variacoesEmGrupos(traducao));
         balloon.setText(Translate.variacoesEmGrupos(traducao));
 
         // if (apenasClicou)
