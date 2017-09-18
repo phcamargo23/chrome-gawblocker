@@ -11,7 +11,7 @@ function tipoDeTraducao_1() {
         var entrada = selObj.toString().trim().trim();
         var traducao = Translate.getTranslation(entrada);
 
-        if (!ehTraducaoValida(entrada, traducao, e.target)) return;
+        if (!ehSaidaValida(entrada, traducao, e.target)) return;
 
         var balloon = createBalloon(selObj);
         balloon.setText(Translate.traducao(traducao));
@@ -34,7 +34,7 @@ function tipoDeTraducao_1() {
             var entrada = selObj.toString().trim().trim();
             var traducao = Translate.getTranslation(entrada);
 
-            if (!ehTraducaoValida(entrada, traducao, e.target)) return;
+            if (!ehSaidaValida(entrada, traducao, e.target)) return;
 
             var balloon = createBalloon(selObj);
             balloon.setText(Translate.traducao(traducao));
@@ -214,14 +214,22 @@ function createBalloon(selection) {
     return balloon;
 }
 
-function ehTraducaoValida(entrada, traducao, element) {
-    if (element.tagName == 'INPUT') {
-        // console.log('Elemento input');
+function ehEntradaValida(elemento) {
+    if (elemento.tagName == 'INPUT') {
+        console.log('Entrada inválida!');
         return false;
     }
 
+    return true;
+}
+
+
+
+function ehSaidaValida(entrada, traducao) {
     if (Translate.idiomaDeOrigem(traducao) != 'en') {
-        // console.log('Entrada não aceita: ' + JSON.stringify(traducao));
+        console.log('Entrada não aceita: ' + entrada);
+        // console.log('Tradução não aceita: ' + JSON.stringify(traducao));
+        console.log(traducao);
         return false;
     }
 
@@ -273,6 +281,8 @@ $(document).bind('click', function (e) {
     //     return;
     // }
 
+    if (!ehEntradaValida(e.target)) return;    
+
     if (e.target.id != balaoId) {
         evitarDuplicacaoDeBalao();
 
@@ -288,10 +298,13 @@ $(document).bind('click', function (e) {
                 return;
             }
 
+            auxData = selObj.anchorNode.data;
             selObj.modify("move", "backward", "word");
-            var startOffset = selObj.anchorOffset;
+            selObj.anchorNode.data == auxData? startOffset = selObj.anchorOffset : startOffset = 0;
+            auxData = selObj.anchorNode.data;
             selObj.modify("move", "forward", "word");
-            var endOffset = selObj.anchorOffset;
+            // selObj.anchorNode.data == auxData? endOffset = selObj.anchorOffset : endOffset = 0;
+
             var entrada = selObj.anchorNode.substringData(startOffset, endOffset - startOffset).trim().trim();
         } else {
             var startOffset = selObj.anchorOffset;
@@ -301,7 +314,7 @@ $(document).bind('click', function (e) {
 
         var traducao = Translate.getTranslation(entrada);
 
-        if (!ehTraducaoValida(entrada, traducao, e.target)) return;
+        if (!ehSaidaValida(entrada, traducao)) return;
 
         var balloon = createBalloon(selObj);
         // balloon.setText(Translate.traducao(traducao));
