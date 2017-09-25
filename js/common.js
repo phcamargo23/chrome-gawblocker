@@ -15,7 +15,11 @@ class Translate {
         return response;
     }
 
-    static original(obj) {
+    static idiomaDeOrigem(obj) {
+        return obj.src;
+    }
+
+    static entrada(obj) {
         return obj.sentences[0].orig;
     }
 
@@ -23,43 +27,30 @@ class Translate {
         return obj.sentences[0].trans;
     }
 
-    static variacoes(obj) {
-        if (obj.dict == undefined)
-            return this.traducao(obj).toLowerCase()
-
-        var v = []
-
-        v.push(this.traducao(obj))
-
-        obj.dict.forEach(function (e1) {
-            e1.terms.forEach(function (e2) {
-                v.push(e2);
-            });
-        }, this);
-
-        return v;
+    static haTraducaoCompleta(obj){
+        return obj.dict != undefined;
     }
 
-    static variacoesEmGrupos(obj) {
-        var v = new Object();
-        v.principal = this.traducao(obj);        
-        v.secundarios = []
+    static traducaoCompleta(obj) {
+        var t = new Object();
+        t.principal = this.traducao(obj);
+        t.secundarias = [];
 
-        obj.dict.forEach(function (element) {
-            v.secundarios.push(
-                {
-                    'classe': element.pos,
-                    'termos': element.terms
-                }
-            )
-        }, this);
+        try {
+            obj.dict.forEach(function (element) {
+                t.secundarias.push(
+                    {
+                        'classe': element.pos,
+                        'termos': element.terms
+                    }
+                )
+            }, this);
 
-        return v;
-        // return obj.dict;
-    }
+        } catch (error) {
+            delete v.secundarias;
+        }
 
-    static idiomaDeOrigem(obj) {
-        return obj.src;
+        return t;
     }
 
 }

@@ -1,9 +1,10 @@
 const balaoId = '_balaoDeTraducao'
 var ctrlIsPressed = false;
+var apenasClicou = false;
 
 function tipoDeTraducao_1() {
     //Palavra: dblcilck, Frase: pressionar CTRL
-    
+
     $(document).bind('dblclick', function (e) {
         evitarDuplicacaoDeBalao();
 
@@ -182,26 +183,35 @@ function createBalloon(selection) {
     }
 
     var balloon = {
-        setText: function (text) {
+        setText: function (obj) {
             span.removeChild(loading);
-            // content.innerHTML = `<h3>${text.principal}</h3>`;
 
-            var classe;
-            text.secundarios.forEach(function(e) {
-                classe = `<h4>${e.classe}</h4>`
-                termos = `<h5>${e.termos}</h5>`
-                // content.append(classe);
-            }, this);
+            if (Translate.haTraducaoCompleta(obj)) {
+                var t = Translate.traducaoCompleta(obj);
+                t.secundarias.forEach(function (e) {
+                    classe = `<h4>${e.classe}</h4>`
+                    termos = `<h5>${e.termos}</h5>`
+                    // content.append(classe);
+                }, this);
 
-            content.innerHTML = 
-            `
-                <h3>${text.principal}</h3>
-                ${classe}
-            `;
-        },
-        close: function () {
+                content.innerHTML =
+                    `
+                        <h3>${t.principal}</h3>
+                        ${classe}
+                `;
+            } else {
+                var t = Translate.traducao(obj);
+                content.innerHTML =
+                    `
+                    <h3>${t}</h3>
+                `;
+            }
+        }
+
+        , close: function () {
             span.parentNode.removeChild(span);
         }
+
     };
 
     span.id = balaoId;
@@ -214,9 +224,20 @@ function createBalloon(selection) {
     return balloon;
 }
 
-function ehEntradaValida(elemento) {
-    if (elemento.tagName == 'INPUT') {
-        console.log('Entrada inválida!');
+function ehEntradaValida(e) {
+    // console.log(e);
+    var msgPadrao = 'Entrada inválida:';
+
+    if (e.tagName == 'INPUT' || e.tagName == 'A') {
+        console.log(msgPadrao + ' elemento não permitido.');
+        return false;
+    }
+
+    var text = e.textContent.toString();
+    var match = /\r|\n/.exec(text);
+    if (match) {
+        // console.log(e);
+        console.log(msgPadrao + ' entrada fora do padrão.');
         return false;
     }
 
@@ -226,12 +247,12 @@ function ehEntradaValida(elemento) {
 
 
 function ehSaidaValida(entrada, traducao) {
-    if (Translate.idiomaDeOrigem(traducao) != 'en') {
-        console.log('Entrada não aceita: ' + entrada);
-        // console.log('Tradução não aceita: ' + JSON.stringify(traducao));
-        console.log(traducao);
-        return false;
-    }
+    var msgPadrao = 'Saída inválida:';
+
+    // if (Translate.idiomaDeOrigem(traducao) == 'pt') {
+    //     console.log(msgPadrao + 'Mesma tradução.');
+    //     return false;
+    // }
 
     return true;
 }
@@ -254,11 +275,11 @@ function adicionarAoHistorico(entrada, traducao) {
 
     chrome.storage.sync.get(function (items) {
         if (objIsEmpty(items)) {
-            chrome.storage.sync.set({ 'historico': [Translate.original(traducao)] }, function () {
+            chrome.storage.sync.set({ 'historico': [Translate.entrada(traducao)] }, function () {
                 // console.log('Storage inicializado');
             });
         } else {
-            items.historico.push(Translate.original(traducao));
+            items.historico.push(Translate.entrada(traducao));
             chrome.storage.sync.set(items, function (items2) {
                 // console.log('Novo registro armazenado')
             });
@@ -267,49 +288,28 @@ function adicionarAoHistorico(entrada, traducao) {
 }
 
 $(document).bind('click', function (e) {
-    // console.log(e.target.textContent.toString());
-
-    // if(e.target.firstElementChild != null){
-    //     console.log('Elemento não aceito!');
-    //     return;
-    // }
-
-    // var text = e.target.textContent.toString();
-    // var match = /\r|\n/.exec(text);
-    // if (match) {
-    //     console.log('Elemento não aceito!');
-    //     return;
-    // }
-
-    if (!ehEntradaValida(e.target)) return;    
+    // console.log(e);
+    if (!ehEntradaValida(e.target)) return;
 
     if (e.target.id != balaoId) {
         evitarDuplicacaoDeBalao();
 
         var selObj = getSelectedText();
-        var apenasClicou = selObj.anchorOffset == selObj.focusOffset;
+        apenasClicou = selObj.type == 'Caret';
 
-        //Se apenas clicou numa palavra e não selecionou um texto
+        //Se apenas clicou numa palavra
         if (apenasClicou) {
-            var text = e.target.textContent.toString();
-            var match = /\r|\n/.exec(text);
-            if (match) {
-                console.log('Elemento não aceito!');
-                return;
-            }
+            if (selObj.anchorOffset > 0) selObj.modify("move", "backward", "word");
 
-            auxData = selObj.anchorNode.data;
-            selObj.modify("move", "backward", "word");
-            selObj.anchorNode.data == auxData? startOffset = selObj.anchorOffset : startOffset = 0;
-            auxData = selObj.anchorNode.data;
+            startOffset = selObj.anchorOffset;
             selObj.modify("move", "forward", "word");
-            // selObj.anchorNode.data == auxData? endOffset = selObj.anchorOffset : endOffset = 0;
-
-            var entrada = selObj.anchorNode.substringData(startOffset, endOffset - startOffset).trim().trim();
+            endOffset = selObj.anchorOffset;
+            entrada = selObj.anchorNode.substringData(startOffset, endOffset - startOffset).trim().trim();
+            //Selecionou um texto
         } else {
-            var startOffset = selObj.anchorOffset;
-            var endOffset = selObj.anchorOffset;
-            var entrada = selObj.toString().trim().trim();
+            startOffset = selObj.anchorOffset;
+            endOffset = selObj.focusOffset;
+            entrada = selObj.toString().trim().trim();
         }
 
         var traducao = Translate.getTranslation(entrada);
@@ -317,9 +317,11 @@ $(document).bind('click', function (e) {
         if (!ehSaidaValida(entrada, traducao)) return;
 
         var balloon = createBalloon(selObj);
-        // balloon.setText(Translate.traducao(traducao));
-        console.log(Translate.variacoesEmGrupos(traducao));
-        balloon.setText(Translate.variacoesEmGrupos(traducao));
+        // apenasClicou ?
+        //     balloon.setText(Translate.traducao(traducao)) :
+        //     balloon.setText(Translate._traducaoPrincipal(traducao));
+
+        balloon.setText(traducao);
 
         // if (apenasClicou)
         //     var time = 1000;
@@ -332,3 +334,4 @@ $(document).bind('click', function (e) {
 
     }
 });
+console.clear();
