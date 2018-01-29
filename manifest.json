@@ -9,7 +9,8 @@
       "node_modules/moment/moment.js",
       "node_modules/moment/locale/pt-br.js",
       "node_modules/moment-duration-format/lib/moment-duration-format.js",
-      "js/timer.background.js"
+      "js/timer.background.js",
+      "js/tts.background.js"
     ]
   },
   "content_scripts": [
@@ -18,7 +19,8 @@
       "js": [
         "node_modules/jquery/dist/jquery.min.js",        
         "js/common.js",
-        "js/translate.content.js"
+        "js/translate.content.js",
+        "js/tts.content.js"
         ],
      "run_at": "document_end",
      "all_frames": true      
@@ -45,6 +47,7 @@
     "<all_urls>",
     "storage",
     "alarms", 
-    "notifications"
+    "notifications",
+    "tts"
   ]
 }

@@ -40,8 +40,8 @@ timer = setInterval(function () {
     //     'Restante: ' + moment.duration(localStorage.tempo, "minutes").format("h:mm"));
 
     chrome.tabs.getSelected(null, function (tab) {
-        for (i = 0; i < sites.length; i++) {
-            element = sites[i];
+        for (listenIcon = 0; listenIcon < sites.length; listenIcon++) {
+            element = sites[listenIcon];
             // console.log(tab.url);
             // console.log(element)
             if (tab.url.indexOf(element) != -1) {
