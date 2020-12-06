@@ -5,7 +5,7 @@ function objIsEmpty(obj) {
 class Translate {
 
     static getTranslation(t) {
-        const TRANSLATE_URI = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=pt&hl=pt-BR&dt=t&dt=bd&dj=1&source=bubble&q=';
+        const TRANSLATE_URI = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=pt&hl=pt-BR&dt=t&dt=bd&dj=1&source=bubble&q='; // TODO: api não funciona mais
         var xhttp = new XMLHttpRequest();
         xhttp.open("GET", TRANSLATE_URI + t, false);
         xhttp.setRequestHeader("Content-type", "application/json");
